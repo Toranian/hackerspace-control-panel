@@ -6,17 +6,16 @@ import time
 home_dir = str(Path.home()) # Home directory
 os.chdir(home_dir)          # Set path to home directory
 working_dir = home_dir      # Working directory set to home directory by default
-files = os.listdir(working_dir)
 all_dirs = []
 back_num = 0
 
 # Some commands to change or choose directory
 def change_directory():
-    global back_num
+    global back_num, home_dir, working_dir
 
     # Command input
     command = input("select: ").lower()        # Command, lowercased to
-    command.replace(" ", "")                       # Replace all whitespace with nothing
+    command.replace(" ", "")                   # Replace all whitespace with nothing
 
     if command== "quit" or command[0] == "q":  # Exit the program
         quit()
@@ -49,7 +48,10 @@ def clean_files(d_files):
 
 # List all the files in the working_dir
 while True:
-    files = clean_files(os.listdir(working_dir)) # Files in that directory
+    try:
+        files = clean_files(os.listdir(working_dir)) # Files in that directory
+    except:
+        pass
     os.system("cls")                             # Clear the terminal of last file list
 
     # List the files
@@ -63,5 +65,5 @@ while True:
 
     # Current working directory
     working_dir = change_directory()
-    all_dirs.append(working_dir)
-    # os.chdir(working_dir)
+    # all_dirs.append(working_dir)
+    os.chdir(working_dir)
