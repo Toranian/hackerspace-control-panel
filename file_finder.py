@@ -1,13 +1,20 @@
 import os, getpass
 from pathlib import Path
-import time
+import re
 
 # Helpful variables and home directory
 home_dir = str(Path.home()) # Home directory
 os.chdir(home_dir)          # Set path to home directory
 working_dir = home_dir      # Working directory set to home directory by default
 all_dirs = []
-back_num = 0
+
+# Go back one directory
+def back(word):
+    word = word[::-1]               # Inverts string
+    index = word[1:].find('\\') + 1 # Finds "\" char and indexes it
+    word = word[index:]             # Gets word without the ending
+    word = word[::-1]               # Flips the string back
+    return word                     # Returns the word
 
 # Some commands to change or choose directory
 def change_directory():
@@ -17,8 +24,7 @@ def change_directory():
     command = input("select: ").lower()        # Command, lowercased to
     command.replace(" ", "")                   # Replace all whitespace with nothing
 
-    if command== "quit" or command[0] == "q":  # Exit the program
-        quit()
+    if command== "quit" or command[0] == "q": quit() # Exit the program
 
     if command == "help" or command[0] == "h": # Displays text that may be useful
         print("""
@@ -28,9 +34,8 @@ def change_directory():
         """)
 
     if command == "back" or command[0] == "b": # Revert to a previous directory
-        back_num += 1
-        working_dir = all_dirs[:back_num]
-        return
+        working_dir = back(working_dir)
+        return working_dir
 
     # Try to change the directory to a number
     try:
@@ -48,10 +53,9 @@ def clean_files(d_files):
 
 # List all the files in the working_dir
 while True:
-    try:
-        files = clean_files(os.listdir(working_dir)) # Files in that directory
-    except:
-        pass
+
+    files = clean_files(os.listdir(working_dir)) # Files in that directory
+
     os.system("cls")                             # Clear the terminal of last file list
 
     # List the files
@@ -65,5 +69,4 @@ while True:
 
     # Current working directory
     working_dir = change_directory()
-    # all_dirs.append(working_dir)
     os.chdir(working_dir)
