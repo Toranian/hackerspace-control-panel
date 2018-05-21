@@ -9,7 +9,7 @@ os.chdir(home_dir)          # Set path to home directory
 working_dir = home_dir      # Working directory set to home directory by default
 all_dirs = []
 
-# Operating system dependant variable
+# Operating system dependant variables
 if platform == "linux" or platform == "darwin":
     slash = "/"
     execute_file = "./"
@@ -17,8 +17,10 @@ else:
     slash = "\\"
     execute_file = "call"
 
-# Go back one directory
+
 def back(directory):
+    """Go back one directory. Takes one parameter, change_directory
+       and takes off the CWD ending."""
     directory = directory[::-1]               # Inverts string
     index = directory[1:].find(slash) + 1 # Finds "\" char and indexes it
     directory = directory[index:]             # Gets word without the ending
@@ -27,6 +29,9 @@ def back(directory):
 
 # Help the user
 def help_func():
+    """Displays some text that describes how to use the program.
+    Will also wait for user input before continuing with the program"""
+
     print("""
 
     1. Try typing the number of the file you want to open
@@ -54,6 +59,7 @@ def change_directory():
     while len(command) == 0:
         command = input("select: ").lower()        # Command, lowercased to
         command.replace(" ", "")                   # Replace all whitespace with nothing
+        help_func()
 
     if command== "quit" or command[0] == "q": quit() # Exit the program
 
