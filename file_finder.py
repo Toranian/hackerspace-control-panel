@@ -4,9 +4,9 @@ from sys import platform
 import time
 
 # Helpful variables and home directory
-home_dir = str(Path.home()) # Home directory
-os.chdir(home_dir)          # Set path to home directory
-working_dir = home_dir      # Working directory set to home directory by default
+home_dir = str(Path.home())
+os.chdir(home_dir)
+working_dir = home_dir
 all_dirs = []
 
 # Operating system dependant variables
@@ -17,17 +17,15 @@ else:
     slash = "\\"
     execute_file = "call"
 
-
 def back(directory):
     """Go back one directory. Takes one parameter, change_directory
        and takes off the CWD ending."""
     directory = directory[::-1]               # Inverts string
     index = directory[1:].find(slash) + 1 # Finds "\" char and indexes it
-    directory = directory[index:]             # Gets word without the ending
+    directory = directory[index:]             # Slices word without the ending
     directory = directory[::-1]               # Flips the string back
     return directory                     # Returns the word
 
-# Help the user
 def help_func():
     """Displays some text that describes how to use the program.
     Will also wait for user input before continuing with the program"""
@@ -41,16 +39,18 @@ def help_func():
     wait = input("""
     Press enter to continue""")
 
-# Removes hidden files
 def clean_files(d_files):
+    """Removes all hidden files within a list."""
+
     c_files = []
     for f in d_files:
         if str(f[0]) != ".":
             c_files.append(f)
     return c_files
 
-# Some commands to change or choose directory
 def change_directory():
+    """Changes the directory based on what the user wants."""
+
     global working_dir
     files = clean_files(os.listdir(working_dir)) # CWD of cleaned files
 
@@ -59,7 +59,7 @@ def change_directory():
     while len(command) == 0:
         command = input("select: ").lower()        # Command, lowercased to
         command.replace(" ", "")                   # Replace all whitespace with nothing
-        help_func()
+        
 
     if command== "quit" or command[0] == "q": quit() # Exit the program
 
@@ -68,7 +68,6 @@ def change_directory():
 
     if command == "back" or command[0] == "b": # Revert to a previous directory
         working_dir = back(working_dir)
-
 
     # Try to change the directory to a number
     if command.isdigit():
@@ -85,10 +84,9 @@ def change_directory():
             except: pass
 
         # Return the new directory
-        try:
+        else:
             return "{}{}{}".format(working_dir, slash, str(files[int(command)]))
-        except:
-            help_func()
+
 
     # Try to retun the working directory, but if it fails, return the previous
     # working_dir
@@ -97,22 +95,23 @@ def change_directory():
     except:
         return back(working_dir)
 
+def list_files(file_list,):
+    """Lists all the files in a file variable in the list format"""
+
+    i = 0
+    for file in file_list:
+        if file[0] != ".":
+            print("{}| {}".format(i, file))
+            i += 1
+
+
 # List all the files in the working_dir
 while True:
 
     files = clean_files(os.listdir(working_dir)) # Files in that directory
-
     os.system("cls")                             # Clear the terminal of last file list
-
-    # List the files
-    i = 0                                        # Iter variable
-    for file in files:
-        if file[0] != ".":
-            print("{}| {}".format(i, file))
-            i += 1
-    # After listdir
+    list_files(files)
     print("CWD| {}".format(working_dir))
-
     # Current working directory
     working_dir = change_directory()
 
