@@ -48,6 +48,15 @@ def clean_files(d_files):
             c_files.append(f)
     return c_files
 
+def user_choice(message):
+    choice = ""
+    while len(choice) == 0:
+        choice = input("{} Y/n: ".format(message)).lower()
+    if choice == "y":
+        return True
+    elif choice == "n":
+        return False
+
 def change_directory():
     """Changes the directory based on what the user wants."""
 
@@ -59,7 +68,7 @@ def change_directory():
     while len(command) == 0:
         command = input("select: ").lower()        # Command, lowercased to
         command.replace(" ", "")                   # Replace all whitespace with nothing
-        
+
 
     if command== "quit" or command[0] == "q": quit() # Exit the program
 
@@ -76,12 +85,16 @@ def change_directory():
 
         # Run file if it is not a folder
         if "." in file_name:
-            try:
-                os.system("{} {}".format(execute_file, file_name))
-                print("ran file")
-                time.sleep(1)
-                return back(working_dir)
-            except: pass
+            choice = user_choice("Would you like to run {}?".format(file_name))
+            if choice:
+                try:
+                    os.system("{} {}".format(execute_file, file_name))
+                    print("ran file")
+                    time.sleep(1)
+                    return back(working_dir)
+                except: pass
+            else:
+                return working_dir
 
         # Return the new directory
         else:
