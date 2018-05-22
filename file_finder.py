@@ -1,13 +1,11 @@
-import os, getpass
 from pathlib import Path
 from sys import platform
-import time
+import os
 
 # Helpful variables and home directory
 home_dir = str(Path.home())
-os.chdir(home_dir)
 working_dir = home_dir
-all_dirs = []
+os.chdir(working_dir)
 
 # Operating system dependant variables
 if platform == "linux" or platform == "darwin":
@@ -20,6 +18,7 @@ else:
 def back(directory):
     """Go back one directory. Takes one parameter, change_directory
        and takes off the CWD ending."""
+       
     directory = directory[::-1]               # Inverts string
     index = directory[1:].find(slash) + 1 # Finds "\" char and indexes it
     directory = directory[index:]             # Slices word without the ending
@@ -89,8 +88,7 @@ def change_directory():
             if choice:
                 try:
                     os.system("{} {}".format(execute_file, file_name))
-                    print("ran file")
-                    time.sleep(1)
+                    print("<File Executed")
                     return back(working_dir)
                 except: pass
             else:
@@ -101,14 +99,12 @@ def change_directory():
             return "{}{}{}".format(working_dir, slash, str(files[int(command)]))
 
 
-    # Try to retun the working directory, but if it fails, return the previous
-    # working_dir
     try:
         return working_dir
     except:
         return back(working_dir)
 
-def list_files(file_list,):
+def list_files(file_list):
     """Lists all the files in a file variable in the list format"""
 
     i = 0
